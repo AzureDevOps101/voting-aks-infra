@@ -1,0 +1,102 @@
+
+
+##################################################################################################
+# Redis service
+##################################################################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: redis
+    app.kubernetes.io/name: vote-app-test
+  name: redis
+spec:
+  ports:
+  - name: "redis"
+    port: 6379
+    targetPort: 6379
+  selector:
+    service: redis
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    service: redis
+    app.kubernetes.io/name: vote-app-test
+  name: redis
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app.kubernetes.io/name: vote-app-test
+        app.kubernetes.io/component: redis
+        app: redis
+        service: redis
+    spec:
+      containers:
+      - image: redis:alpine
+        name: redis
+        ports:
+        - containerPort: 6379
+      restartPolicy: Always
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+status: {}
+---
+
+
+##################################################################################################
+# DB service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: db
+    app.kubernetes.io/name: vote-app-test
+  name: db
+spec:
+  ports:
+  - name: db
+    port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+    service: db
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    service: db
+  name: db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app.kubernetes.io/name: vote-app-test
+        app.kubernetes.io/component: db
+        app: db
+        service: db
+    spec:
+      containers:
+      - image: postgres:9.4
+        name: db
+        ports:
+        - containerPort: 5432
+      restartPolicy: Always
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+---

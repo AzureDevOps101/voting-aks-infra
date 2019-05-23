@@ -1,0 +1,49 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vote
+  labels:
+    app.kubernetes.io/name: vote-app
+spec:
+  hosts:
+  - "vote.devopshub.cn"
+  gateways:
+  - vote-vote-gateway
+  http:
+  - match:
+    - uri:
+        exact: /
+    - uri:
+        prefix: /products
+    route:
+    - destination:
+        host: vote
+        subset: v2
+        port:
+          number: 5001
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: result
+  labels:
+    app.kubernetes.io/name: vote-app
+spec:
+  hosts:
+  - "result.devcloudx.com:30698"
+  gateways:
+  - vote-result-gateway
+  http:
+  - match:
+    - uri:
+        exact: /
+    - uri:
+        regex: '^.*\.(ico|png|jpg|js)$'
+    route:
+    - destination:
+        host: result
+        subset: v2
+        port:
+          number: 5002
+
+

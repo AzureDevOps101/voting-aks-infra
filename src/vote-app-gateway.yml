@@ -1,0 +1,86 @@
+
+##################################################################################################
+# Vote-Service Gateway
+##################################################################################################
+
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: vote-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "vote.devopshub.cn"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vote-route
+  labels:
+    app.kubernetes.io/name: vote-app
+spec:
+  hosts:
+  - "vote.devopshub.cn"
+  gateways:
+  - vote-gateway
+  http:
+  - match:
+    - uri:
+        exact: /
+    route:
+    - destination:
+        host: vote
+        subset: v1
+        port:
+          number: 5001
+---
+
+##################################################################################################
+# Result Gateway
+##################################################################################################
+
+
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: result-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "result.devopshub.cn"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: result-route
+  labels:
+    app.kubernetes.io/name: vote-app
+spec:
+  hosts:
+  - "result.devopshub.cn"
+  gateways:
+  - result-gateway
+  http:
+  - match:
+    - uri:
+        exact: /
+    - uri:
+        regex: '^.*\.(ico|png|jpg|js)$'
+    route:
+    - destination:
+        host: result
+        subset: v1
+        port:
+          number: 5002

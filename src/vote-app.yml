@@ -1,0 +1,294 @@
+
+##################################################################################################
+# Vote service
+##################################################################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vote
+    app.kubernetes.io/name: vote-app
+  name: vote
+spec:
+  ports:
+  - port: 5001
+    targetPort: 80
+    name: http-vote
+  selector:
+    app: vote
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: vote
+    version: v1
+  name: vote-v1
+spec:
+  replicas: 2
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app.kubernetes.io/name: vote-app
+        app.kubernetes.io/component: vote
+        app: vote
+        version: v1
+    spec:
+      containers:
+      - image: azuredevops101.azurecr.io/vote:224
+        name: vote
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: vote
+    version: v2
+  name: vote-v2
+spec:
+  replicas: 2
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app.kubernetes.io/name: vote-app
+        app.kubernetes.io/component: vote
+        app: vote
+        version: v2
+    spec:
+      containers:
+      - image: azuredevops101.azurecr.io/vote:224
+        name: vote
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+---
+
+
+
+##################################################################################################
+# Redis service
+##################################################################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis
+    app.kubernetes.io/name: vote-app
+  name: redis
+spec:
+  ports:
+  - name: "redis"
+    port: 6379
+    targetPort: 6379
+  selector:
+    app: redis
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: redis
+  name: redis
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app.kubernetes.io/name: vote-app
+        app.kubernetes.io/component: redis
+        app: redis
+    spec:
+      containers:
+      - image: redis:alpine
+        name: redis
+        ports:
+        - containerPort: 6379
+      restartPolicy: Always
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+status: {}
+---
+
+##################################################################################################
+# Worker service
+##################################################################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: worker
+    app.kubernetes.io/name: vote-app
+  name: worker
+spec:
+  ports:
+  - name: worker
+    port: 55555
+    targetPort: 0
+  selector:
+    app: worker
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: worker
+  name: worker
+spec:
+  replicas: 2
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app.kubernetes.io/name: vote-app
+        app.kubernetes.io/component: worker
+        app: worker
+    spec:
+      containers:
+      - image: azuredevops101.azurecr.io/worker:latest
+        name: worker
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+---
+
+##################################################################################################
+# DB service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: db
+    app.kubernetes.io/name: vote-app
+  name: db
+spec:
+  ports:
+  - name: db
+    port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+    app: db
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: db
+  name: db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app.kubernetes.io/name: vote-app
+        app.kubernetes.io/component: db
+        app: db
+    spec:
+      containers:
+      - image: postgres:9.4
+        name: db
+        ports:
+        - containerPort: 5432
+      restartPolicy: Always
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+---
+
+##################################################################################################
+# Result service
+##################################################################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: result
+    app.kubernetes.io/name: vote-app
+  name: result
+spec:
+  ports:
+  - port: 5002
+    name: http-result
+    targetPort: 80
+  selector:
+    app: result
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: result
+    version: v1
+  name: result-v1
+spec:
+  replicas: 2
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app.kubernetes.io/name: vote-app
+        app.kubernetes.io/component: result
+        app: result
+        version: v1
+    spec:
+      containers:
+      - image: azuredevops101.azurecr.io/result:226
+        name: result
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: result
+    version: v2
+  name: result-v2
+spec:
+  replicas: 2
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app.kubernetes.io/name: vote-app
+        app.kubernetes.io/component: result
+        app: result
+        version: v2
+    spec:
+      containers:
+      - image: azuredevops101.azurecr.io/result:226
+        name: result
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always

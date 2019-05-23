@@ -1,0 +1,44 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vote
+spec:
+  hosts:
+  - "vote.devopshub.cn"
+  gateways:
+  - vote-gateway
+  http:
+  - match:
+    - uri:
+        exact: /
+    route:
+    - destination:
+        host: vote
+        subset: v1
+        port:
+          number: 5001
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: result
+spec:
+  hosts:
+  - "result.devopshub.cn"
+  gateways:
+  - result-gateway
+  http:
+  - match:
+    - uri:
+        exact: /
+    - uri:
+        regex: '^.*\.(ico|png|jpg|js)$'
+    route:
+    - destination:
+        host: result
+        subset: v1
+        port:
+          number: 5002
+
+
