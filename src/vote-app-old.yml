@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: vote
+  name: vote-route
 spec:
   hosts:
   - "vote.devopshub.cn"
@@ -22,7 +22,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: result
+  name: result-route
 spec:
   hosts:
   - "result.devopshub.cn"
