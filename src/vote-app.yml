@@ -245,7 +245,7 @@ metadata:
     version: v1
   name: result-v1
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       annotations:
@@ -273,7 +273,7 @@ metadata:
     version: v2
   name: result-v2
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       annotations:
