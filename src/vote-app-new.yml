@@ -42,7 +42,7 @@ spec:
     - uri:
         prefix: /socket.io
     - uri:
-        regex: '^.*\.(ico|png|jpg|js|css|io)$'
+        regex: '^.*\.(ico|png|jpg|js)$'
     route:
     - destination:
         host: result
