@@ -54,7 +54,7 @@ metadata:
     version: v2
   name: vote-v2
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       annotations:
