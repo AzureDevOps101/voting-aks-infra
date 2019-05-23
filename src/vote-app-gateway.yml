@@ -77,6 +77,8 @@ spec:
     - uri:
         exact: /
     - uri:
+        prefix: /stylesheets
+    - uri:
         regex: '^.*\.(ico|png|jpg|js)$'
     route:
     - destination:
