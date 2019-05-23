@@ -11,6 +11,8 @@ spec:
   - match:
     - uri:
         exact: /
+    - uri:
+        prefix: /
     route:
     - destination:
         host: vote
@@ -32,6 +34,10 @@ spec:
   - match:
     - uri:
         exact: /
+    - uri:
+        prefix: /stylesheets
+    - uri:
+        prefix: /socket.io
     - uri:
         regex: '^.*\.(ico|png|jpg|js)$'
     route:

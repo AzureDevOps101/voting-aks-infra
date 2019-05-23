@@ -79,6 +79,8 @@ spec:
     - uri:
         prefix: /stylesheets
     - uri:
+        prefix: /socket.io
+    - uri:
         regex: '^.*\.(ico|png|jpg|js)$'
     route:
     - destination:
