@@ -285,7 +285,7 @@ spec:
         version: v2
     spec:
       containers:
-      - image: azuredevops101.azurecr.cn/result:239
+      - image: azuredevops101.azurecr.cn/result:439
         name: result
         ports:
         - containerPort: 80
