@@ -38,7 +38,7 @@ spec:
         version: v1
     spec:
       containers:
-      - image: azuredevops101.azurecr.cn/vote:438
+      - image: azuredevops101.azurecr.cn/vote:445
         name: vote
         ports:
         - containerPort: 80
@@ -257,7 +257,7 @@ spec:
         version: v1
     spec:
       containers:
-      - image: azuredevops101.azurecr.cn/result:439
+      - image: azuredevops101.azurecr.cn/result:446
         name: result
         ports:
         - containerPort: 80
