@@ -33,7 +33,6 @@ spec:
   - voting-gateway
   - mesh
   http:
-  - match:
   - route:
     - destination:
         host: result
