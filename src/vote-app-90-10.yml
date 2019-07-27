@@ -5,15 +5,12 @@ metadata:
 spec:
   hosts:
   - "vote.devopshub.cn"
+  - "vote"
   gateways:
   - vote-gateway
+  - mesh
   http:
-  - match:
-    - uri:
-        exact: /
-    - uri:
-        prefix: /
-    route:
+  - route:
     - destination:
         host: vote
         subset: v1
@@ -38,16 +35,7 @@ spec:
   gateways:
   - result-gateway
   http:
-  - match:
-    - uri:
-        exact: /
-    - uri:
-        prefix: /stylesheets
-    - uri:
-        prefix: /socket.io
-    - uri:
-        regex: '^.*\.(ico|png|jpg|js)$'
-    route:
+  - route:
     - destination:
         host: result
         subset: v1
