@@ -38,7 +38,7 @@ spec:
         version: v1
     spec:
       containers:
-      - image: azuredevops101.azurecr.io/vote:224
+      - image: azuredevops101.azurecr.cn/vote:224
         name: vote
         ports:
         - containerPort: 80
@@ -66,7 +66,7 @@ spec:
         version: v2
     spec:
       containers:
-      - image: azuredevops101.azurecr.io/vote:238
+      - image: azuredevops101.azurecr.cn/vote:238
         name: vote
         ports:
         - containerPort: 80
@@ -162,7 +162,7 @@ spec:
         app: worker
     spec:
       containers:
-      - image: azuredevops101.azurecr.io/worker:latest
+      - image: azuredevops101.azurecr.cn/worker:latest
         name: worker
       imagePullSecrets:
       - name: regcred
@@ -257,7 +257,7 @@ spec:
         version: v1
     spec:
       containers:
-      - image: azuredevops101.azurecr.io/result:226
+      - image: azuredevops101.azurecr.cn/result:226
         name: result
         ports:
         - containerPort: 80
@@ -285,7 +285,7 @@ spec:
         version: v2
     spec:
       containers:
-      - image: azuredevops101.azurecr.io/result:239
+      - image: azuredevops101.azurecr.cn/result:239
         name: result
         ports:
         - containerPort: 80
