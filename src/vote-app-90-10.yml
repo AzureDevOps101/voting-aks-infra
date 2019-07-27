@@ -7,7 +7,7 @@ spec:
   - "vote.devopshub.cn"
   - "vote"
   gateways:
-  - vote-gateway
+  - voting-gateway
   - mesh
   http:
   - route:
@@ -32,8 +32,10 @@ metadata:
 spec:
   hosts:
   - "result.devopshub.cn"
+  - "result"
   gateways:
-  - result-gateway
+  - voting-gateway
+  - mesh
   http:
   - route:
     - destination:
