@@ -27,13 +27,12 @@ metadata:
 spec:
   hosts:
   - "vote.devopshub.cn"
+  - "vote"
   gateways:
   - vote-gateway
+  - mesh
   http:
-  - match:
-    - uri:
-        exact: /
-    route:
+  - route:
     - destination:
         host: vote
         subset: v1
@@ -70,21 +69,16 @@ metadata:
 spec:
   hosts:
   - "result.devopshub.cn"
+  - "result"
+
   gateways:
-  - result-gateway
+  - vote-gateway
+  - mesh
   http:
-  - match:
-    - uri:
-        exact: /
-    - uri:
-        prefix: /stylesheets
-    - uri:
-        prefix: /socket.io
-    - uri:
-        regex: '^.*\.(ico|png|jpg|js)$'
-    route:
+  - route:
     - destination:
         host: result
         subset: v1
         port:
           number: 5002
+
