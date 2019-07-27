@@ -6,7 +6,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: vote-gateway
+  name: voting-gateway
 spec:
   selector:
     istio: ingressgateway # use istio default controller
@@ -16,7 +16,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "vote.devopshub.cn"
+    - "*"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -29,7 +29,7 @@ spec:
   - "vote.devopshub.cn"
   - "vote"
   gateways:
-  - vote-gateway
+  - voting-gateway
   - mesh
   http:
   - route:
@@ -40,26 +40,7 @@ spec:
           number: 5001
 ---
 
-##################################################################################################
-# Result Gateway
-##################################################################################################
 
-
-apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: result-gateway
-spec:
-  selector:
-    istio: ingressgateway # use istio default controller
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "result.devopshub.cn"
----
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -72,7 +53,7 @@ spec:
   - "result"
 
   gateways:
-  - vote-gateway
+  - voting-gateway
   - mesh
   http:
   - route:
