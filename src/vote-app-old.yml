@@ -7,7 +7,7 @@ spec:
   - "vote.devopshub.cn"
   - "vote"
   gateways:
-  - vote-gateway
+  - voting-gateway
   - mesh
   http:
   - route:
@@ -27,7 +27,7 @@ spec:
   - "result.devopshub.cn"
   - "result"
   gateways:
-  - result-gateway
+  - voting-gateway
   - mesh
   http:
   - route:
